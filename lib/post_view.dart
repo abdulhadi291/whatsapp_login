@@ -26,18 +26,25 @@ class _PostViewState extends State<PostView> {
     setState(() {});
   }
 
-
+  editPost(index, content, images) {
+    posts[index]={
+    'content' : postContentController.text,
+    'images' : [imageurlController.text],
+    };
+    setState(() {
+      
+    });
+  }
   addPost() {
     posts.add({
       'content': postContentController.text,
       'images': [imageurlController.text],
-      
     });
 
     postContentController.clear();
     imageurlController.clear();
     setState(() {});
-print(imageurlController.text);
+    print(imageurlController.text);
     imageIndex++;
     if (imageIndex >= postImages.length) {
       imageIndex = 0;
@@ -103,6 +110,7 @@ print(imageurlController.text);
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
+                        title: Text('Add Post'),
                         content: Container(
                           width: 400,
                           height: 300,
@@ -149,7 +157,6 @@ print(imageurlController.text);
                                       onPressed: () {
                                         addPost();
                                         Navigator.of(context).pop();
-
                                       },
                                       child: Text('Add'))
                                 ],
@@ -196,7 +203,74 @@ print(imageurlController.text);
                       ),
                       SizedBox(width: 390),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Update Post'),
+                                content: Container(
+                                  width: 400,
+                                  height: 300,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      TextField(
+                                        controller: postContentController,
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        decoration: InputDecoration(
+                                          labelText: 'Content',
+                                          hintText: 'Enter the content',
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          filled: true,
+                                          fillColor: Colors.grey[100],
+                                        ),
+                                      ),
+                                      SizedBox(height: 20),
+                                      TextField(
+                                        controller: imageurlController,
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        decoration: InputDecoration(
+                                          labelText: 'URLs',
+                                          hintText: 'Enter the URLs',
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          filled: true,
+                                          fillColor: Colors.grey[100],
+                                        ),
+                                      ),
+                                      SizedBox(height: 20),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          ElevatedButton(
+                                            child: Text("Close"),
+                                            onPressed: () =>
+                                                Navigator.of(context).pop(),
+                                          ),
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                editPost(index, postContentController.text, imageurlController.text);
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text('Update'))
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
                         icon: Icon(Icons.edit),
                       ),
                       SizedBox(width: 10),
